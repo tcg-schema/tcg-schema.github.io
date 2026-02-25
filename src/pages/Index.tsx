@@ -1,6 +1,6 @@
 import { SchemaBrowser } from "@/components/SchemaBrowser";
 import { Download, Github, ExternalLink } from "lucide-react";
-import logo from "@/assets/tcg-logo.png";
+import logo from "@/assets/out.png";
 
 const Index = () => {
   return (
