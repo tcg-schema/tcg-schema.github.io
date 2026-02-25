@@ -659,3 +659,85 @@ tcg:createdBy a rdf:Property ;
   rdfs:label "createdBy"@en ;
   rdfs:domain tcg:CardDescriptor ;
   rdfs:range schema:Organization .
+
+
+########################
+# RULINGS (CORE)
+########################
+
+tcg:Ruling a rdfs:Class ;
+  rdfs:label "Ruling"@en ;
+  rdfs:comment "A dated official or community ruling/clarification about how a card (or printing) works. Not the full rules text; an interpretation/clarification with provenance."@en ;
+  rdfs:subClassOf schema:CreativeWork .
+
+# What the ruling is about
+tcg:rulingAppliesTo a rdf:Property ;
+  rdfs:label "rulingAppliesTo"@en ;
+  rdfs:comment "The entity the ruling is about (typically a Card; sometimes a specific Printing)."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range schema:Thing .
+
+# Optional scoping
+tcg:rulingInGame a rdf:Property ;
+  rdfs:label "rulingInGame"@en ;
+  rdfs:comment "Game context for the ruling (useful when the same schema covers multiple games)."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range tcg:CardGame .
+
+tcg:rulingInFormat a rdf:Property ;
+  rdfs:label "rulingInFormat"@en ;
+  rdfs:comment "Format context, if the ruling is format-dependent."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range tcg:Format .
+
+# The content and when it applies
+tcg:rulingText a rdf:Property ;
+  rdfs:label "rulingText"@en ;
+  rdfs:comment "Human-readable ruling statement."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range xsd:string .
+
+tcg:rulingDate a rdf:Property ;
+  rdfs:label "rulingDate"@en ;
+  rdfs:comment "Date the ruling was issued/published."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range xsd:date .
+
+tcg:effectiveDate a rdf:Property ;
+  rdfs:label "effectiveDate"@en ;
+  rdfs:comment "When the ruling takes effect (if different from rulingDate). Reuses the same name as legality, but here it applies to rulings too."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range xsd:date .
+
+# Provenance
+tcg:rulingSource a rdf:Property ;
+  rdfs:label "rulingSource"@en ;
+  rdfs:comment "URL or document reference for the ruling (official database, FAQ, release notes, etc.)."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range schema:URL .
+
+tcg:rulingAuthority a rdf:Property ;
+  rdfs:label "rulingAuthority"@en ;
+  rdfs:comment "Who issued/maintains the ruling (publisher, rules committee, official judge program, etc.)."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range schema:Organization .
+
+# Versioning / supersession
+tcg:supersedesRuling a rdf:Property ;
+  rdfs:label "supersedesRuling"@en ;
+  rdfs:comment "This ruling supersedes another ruling (newer clarification, errata-driven change, etc.)."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range tcg:Ruling .
+
+tcg:supersededByRuling a rdf:Property ;
+  rdfs:label "supersededByRuling"@en ;
+  rdfs:comment "Inverse link: this ruling has been superseded by a newer one."@en ;
+  rdfs:domain tcg:Ruling ;
+  rdfs:range tcg:Ruling .
+
+# Convenience: attach rulings to cards
+tcg:hasRuling a rdf:Property ;
+  rdfs:label "hasRuling"@en ;
+  rdfs:comment "Links a card (or printing) to a ruling."@en ;
+  rdfs:domain schema:Thing ;
+  rdfs:range tcg:Ruling .
