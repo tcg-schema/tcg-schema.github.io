@@ -1083,3 +1083,52 @@ tcg:partSummary a rdf:Property ;
   rdfs:domain tcg:TurnPart ;
   rdfs:range xsd:string .
 
+############################
+# MULLIGAN (CORE)
+############################
+
+tcg:MulliganRule a rdfs:Class ;
+  rdfs:label "MulliganRule"@en ;
+  rdfs:comment "Defines how players may redraw their starting hand before the first turn."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+# Attach to Game or Format
+tcg:hasMulliganRule a rdf:Property ;
+  rdfs:label "hasMulliganRule"@en ;
+  rdfs:comment "Associates a mulligan rule with a game or format."@en ;
+  rdfs:domain schema:Thing ;     # tcg:CardGame or tcg:Format
+  rdfs:range tcg:MulliganRule .
+
+############################
+# MULLIGAN STRUCTURAL PROPERTIES
+############################
+
+tcg:mulliganType a rdf:Property ;
+  rdfs:label "mulliganType"@en ;
+  rdfs:comment "Type of mulligan system (london, paris, partial, none, custom, etc.)."@en ;
+  rdfs:domain tcg:MulliganRule ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:allowsMultipleMulligans a rdf:Property ;
+  rdfs:label "allowsMultipleMulligans"@en ;
+  rdfs:comment "Whether players may mulligan multiple times."@en ;
+  rdfs:domain tcg:MulliganRule ;
+  rdfs:range xsd:boolean .
+
+tcg:startingHandAfterMulligan a rdf:Property ;
+  rdfs:label "startingHandAfterMulligan"@en ;
+  rdfs:comment "How hand size is determined after mulligans (fixed, decreasing, drawThenBottom, etc.)."@en ;
+  rdfs:domain tcg:MulliganRule ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:mulliganPenaltyModel a rdf:Property ;
+  rdfs:label "mulliganPenaltyModel"@en ;
+  rdfs:comment "How the mulligan penalty is applied (reduceHandSize, bottomCards, revealCondition, etc.)."@en ;
+  rdfs:domain tcg:MulliganRule ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:mulliganSummary a rdf:Property ;
+  rdfs:label "mulliganSummary"@en ;
+  rdfs:comment "Human-readable description of the mulligan procedure."@en ;
+  rdfs:domain tcg:MulliganRule ;
+  rdfs:range xsd:string .
