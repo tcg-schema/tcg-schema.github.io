@@ -741,3 +741,190 @@ tcg:hasRuling a rdf:Property ;
   rdfs:comment "Links a card (or printing) to a ruling."@en ;
   rdfs:domain schema:Thing ;
   rdfs:range tcg:Ruling .
+
+tcg:printingFlavorText a rdf:Property ;
+  rdfs:label "printingFlavorText"@en ;
+  rdfs:comment "Flavor text as printed on this specific printing/language."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range xsd:string .
+
+tcg:printingRulesText a rdf:Property ;
+  rdfs:label "printingRulesText"@en ;
+  rdfs:comment "Rules/game text as printed on this printing (may differ by language/templating; canonical rules stay on tcg:Card)."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range xsd:string .
+
+tcg:printingReminderText a rdf:Property ;
+  rdfs:label "printingReminderText"@en ;
+  rdfs:comment "Reminder text as printed on this printing."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range xsd:string .
+
+############################
+# CARD TEXT FIELDS (CORE)
+############################
+
+tcg:rulesText a rdf:Property ;
+  rdfs:label "rulesText"@en ;
+  rdfs:comment "Rules/game text that affects gameplay. Also known as oracle text / ability text / effect text, depending on the game."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range xsd:string .
+
+tcg:flavorText a rdf:Property ;
+  rdfs:label "flavorText"@en ;
+  rdfs:comment "Non-rules narrative text printed on the card (no gameplay effect)."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range xsd:string .
+
+tcg:reminderText a rdf:Property ;
+  rdfs:label "reminderText"@en ;
+  rdfs:comment "Optional explanatory text that clarifies a keyword/ability but is not itself rules text (may be absent or vary by printing/language)."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range xsd:string .
+
+############################
+# OPTIONAL: FACE-SCOPED TEXT
+############################
+# For split / double-faced / modal cards, you often want text per face.
+
+tcg:faceRulesText a rdf:Property ;
+  rdfs:label "faceRulesText"@en ;
+  rdfs:comment "Rules/game text for a specific card face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+tcg:faceFlavorText a rdf:Property ;
+  rdfs:label "faceFlavorText"@en ;
+  rdfs:comment "Flavor text for a specific card face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+tcg:faceReminderText a rdf:Property ;
+  rdfs:label "faceReminderText"@en ;
+  rdfs:comment "Reminder text for a specific card face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+
+tcg:typeLine a rdf:Property ;
+  rdfs:label "typeLine"@en ;
+  rdfs:comment "Human-readable type line as printed (useful when parsing is incomplete)."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range xsd:string .
+
+
+tcg:CardType a rdfs:Class ;
+  rdfs:label "CardType"@en ;
+  rdfs:comment "A card type term defined by a specific game (Creature, Action, Item, Spell, Location, etc.)."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:CardSubtype a rdfs:Class ;
+  rdfs:label "CardSubtype"@en ;
+  rdfs:comment "A card subtype term defined by a specific game (Elf, Pirate, Item—Weapon, etc.)."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:cardType a rdf:Property ;
+  rdfs:label "cardType"@en ;
+  rdfs:comment "Primary type(s) of a card."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range tcg:CardType .
+
+tcg:cardSubtype a rdf:Property ;
+  rdfs:label "cardSubtype"@en ;
+  rdfs:comment "Subtype(s) of a card."@en ;
+  rdfs:domain tcg:Card ;
+  rdfs:range tcg:CardSubtype .
+
+
+tcg:mechanicKinds a schema:DefinedTermSet ;
+  schema:name "TCG Mechanic Kinds" .
+
+tcg:KeywordAbility a schema:DefinedTerm ;
+  schema:name "keywordAbility" ;
+  schema:inDefinedTermSet tcg:mechanicKinds .
+
+tcg:KeywordAction a schema:DefinedTerm ;
+  schema:name "keywordAction" ;
+  schema:inDefinedTermSet tcg:mechanicKinds .
+
+tcg:StaticAbility a schema:DefinedTerm ;
+  schema:name "staticAbility" ;
+  schema:inDefinedTermSet tcg:mechanicKinds .
+
+tcg:TriggeredAbility a schema:DefinedTerm ;
+  schema:name "triggeredAbility" ;
+  schema:inDefinedTermSet tcg:mechanicKinds .
+
+tcg:ActivatedAbility a schema:DefinedTerm ;
+  schema:name "activatedAbility" ;
+  schema:inDefinedTermSet tcg:mechanicKinds .
+
+
+tcg:effectTypes a schema:DefinedTermSet ;
+  schema:name "TCG Effect Types" .
+
+tcg:Draw a tcg:EffectType ; schema:name "draw" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Discard a tcg:EffectType ; schema:name "discard" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Damage a tcg:EffectType ; schema:name "damage" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Heal a tcg:EffectType ; schema:name "heal" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Search a tcg:EffectType ; schema:name "search" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Shuffle a tcg:EffectType ; schema:name "shuffle" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Mill a tcg:EffectType ; schema:name "mill" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:CreateToken a tcg:EffectType ; schema:name "createToken" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:ModifyStats a tcg:EffectType ; schema:name "modifyStats" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Prevent a tcg:EffectType ; schema:name "prevent" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:CounterAction a tcg:EffectType ; schema:name "counterAction" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:Destroy a tcg:EffectType ; schema:name "destroy" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:ExileRemove a tcg:EffectType ; schema:name "exileRemove" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:ReturnToZone a tcg:EffectType ; schema:name "returnToZone" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:ResourceGain a tcg:EffectType ; schema:name "resourceGain" ; schema:inDefinedTermSet tcg:effectTypes .
+tcg:ResourceSpend a tcg:EffectType ; schema:name "resourceSpend" ; schema:inDefinedTermSet tcg:effectTypes .
+
+
+tcg:EffectType a rdfs:Class ;
+  rdfs:label "EffectType"@en ;
+  rdfs:comment "A standardized classification of an effect (draw, damage, heal, search, discard, createToken, etc.)."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:effectType a rdf:Property ;
+  rdfs:label "effectType"@en ;
+  rdfs:comment "Classifies an Effect using an EffectType term."@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range tcg:EffectType .
+
+tcg:effectText a rdf:Property ;
+  rdfs:label "effectText"@en ;
+  rdfs:comment "Human-readable description of the effect chunk."@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range xsd:string .
+
+tcg:duration a rdf:Property ;
+  rdfs:label "duration"@en ;
+  rdfs:comment "Duration of the effect (untilEndOfTurn, permanent, whileCondition, etc.)."@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:targetsZone a rdf:Property ;
+  rdfs:label "targetsZone"@en ;
+  rdfs:comment "Zone context targeted/affected by the effect (hand, deck, battlefield, discard, etc.). Game-specific zones can extend this."@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range schema:DefinedTerm .
+
+
+tcg:defaultHandSize a rdf:Property ;
+  rdfs:label "defaultHandSize"@en ;
+  rdfs:comment "Default starting hand size for a game/format."@en ;
+  rdfs:domain schema:Thing ;   # CardGame or Format
+  rdfs:range xsd:integer .
+
+tcg:maxHandSize a rdf:Property ;
+  rdfs:label "maxHandSize"@en ;
+  rdfs:comment "Default maximum hand size (limit). If absent, game may have no limit or uses special rules."@en ;
+  rdfs:domain schema:Thing ;   # CardGame or Format
+  rdfs:range xsd:integer .
+
+tcg:handSizeEnforcement a rdf:Property ;
+  rdfs:label "handSizeEnforcement"@en ;
+  rdfs:comment "How hand size limit is enforced (discardDownToLimit, noLimit, endOfTurnCheck, continuousCheck, etc.)."@en ;
+  rdfs:domain schema:Thing ;   # CardGame or Format
+  rdfs:range schema:DefinedTerm .
