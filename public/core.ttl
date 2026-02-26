@@ -998,3 +998,88 @@ tcg:artVariant a rdf:Property ;
   rdfs:comment "Art variant label for this printing (alt art, borderless, etc.)."@en ;
   rdfs:domain tcg:CardPrinting ;
   rdfs:range schema:DefinedTerm .
+
+
+############################
+# TURN STRUCTURE (CORE)
+############################
+
+tcg:TurnStructure a rdfs:Class ;
+  rdfs:label "TurnStructure"@en ;
+  rdfs:comment "Defines how a turn is structured for a game or format (phases/steps and their order)."@en ;
+  rdfs:subClassOf schema:CreativeWork .
+
+tcg:TurnPart a rdfs:Class ;
+  rdfs:label "TurnPart"@en ;
+  rdfs:comment "Abstract superclass for parts of a turn (phase or step)."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:TurnPhase a rdfs:Class ;
+  rdfs:label "TurnPhase"@en ;
+  rdfs:comment "A phase within a turn (e.g., Main Phase, Combat Phase)."@en ;
+  rdfs:subClassOf tcg:TurnPart .
+
+tcg:TurnStep a rdfs:Class ;
+  rdfs:label "TurnStep"@en ;
+  rdfs:comment "A step within a phase (e.g., Draw Step, Declare Attackers Step)."@en ;
+  rdfs:subClassOf tcg:TurnPart .
+
+# Attach a turn structure to a game or format (format can override game)
+tcg:hasTurnStructure a rdf:Property ;
+  rdfs:label "hasTurnStructure"@en ;
+  rdfs:comment "Associates a turn structure to a game or a format."@en ;
+  rdfs:domain schema:Thing ;     # tcg:CardGame or tcg:Format
+  rdfs:range tcg:TurnStructure .
+
+# The ordered parts of the turn
+tcg:turnPart a rdf:Property ;
+  rdfs:label "turnPart"@en ;
+  rdfs:comment "Lists phases/steps that compose a turn structure (use orderIndex for ordering)."@en ;
+  rdfs:domain tcg:TurnStructure ;
+  rdfs:range tcg:TurnPart .
+
+tcg:orderIndex a rdf:Property ;
+  rdfs:label "orderIndex"@en ;
+  rdfs:comment "Order of a turn part within its parent structure/phase (0..n)."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range xsd:integer .
+
+# Phase contains steps (optional; some games have phases only)
+tcg:hasStep a rdf:Property ;
+  rdfs:label "hasStep"@en ;
+  rdfs:comment "Steps contained in a phase (use orderIndex on steps)."@en ;
+  rdfs:domain tcg:TurnPhase ;
+  rdfs:range tcg:TurnStep .
+
+# Semantics that help “engine-ish” reasoning without becoming a full simulator
+tcg:activePlayerRole a rdf:Property ;
+  rdfs:label "activePlayerRole"@en ;
+  rdfs:comment "Describes who is considered the active player during this part (activePlayer, nonActivePlayer, simultaneous, etc.)."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:priorityModel a rdf:Property ;
+  rdfs:label "priorityModel"@en ;
+  rdfs:comment "How players may act during this part (none, alternatingPriority, windowsOnly, simultaneous, etc.)."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:partDuration a rdf:Property ;
+  rdfs:label "partDuration"@en ;
+  rdfs:comment "Duration model of this part (untilEndOfStep, untilEndOfPhase, instantaneous, continuous, etc.)."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:repeatable a rdf:Property ;
+  rdfs:label "repeatable"@en ;
+  rdfs:comment "Whether this part can repeat within a single turn under normal rules."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range xsd:boolean .
+
+# Optional: a short functional description for humans/LLMs
+tcg:partSummary a rdf:Property ;
+  rdfs:label "partSummary"@en ;
+  rdfs:comment "Short human/LLM-friendly summary of what normally happens in this phase/step."@en ;
+  rdfs:domain tcg:TurnPart ;
+  rdfs:range xsd:string .
+
