@@ -812,6 +812,9 @@ tcg:typeLine a rdf:Property ;
   rdfs:domain tcg:Card ;
   rdfs:range xsd:string .
 
+########################################
+# Card Types                           #
+########################################
 
 tcg:CardType a rdfs:Class ;
   rdfs:label "CardType"@en ;
@@ -835,6 +838,9 @@ tcg:cardSubtype a rdf:Property ;
   rdfs:domain tcg:Card ;
   rdfs:range tcg:CardSubtype .
 
+########################################
+# Mechanics                            #
+########################################
 
 tcg:mechanicKinds a schema:DefinedTermSet ;
   schema:name "TCG Mechanic Kinds" .
@@ -880,6 +886,9 @@ tcg:ReturnToZone a tcg:EffectType ; schema:name "returnToZone" ; schema:inDefine
 tcg:ResourceGain a tcg:EffectType ; schema:name "resourceGain" ; schema:inDefinedTermSet tcg:effectTypes .
 tcg:ResourceSpend a tcg:EffectType ; schema:name "resourceSpend" ; schema:inDefinedTermSet tcg:effectTypes .
 
+########################################
+# Effect Types                         #
+########################################
 
 tcg:EffectType a rdfs:Class ;
   rdfs:label "EffectType"@en ;
@@ -910,6 +919,9 @@ tcg:targetsZone a rdf:Property ;
   rdfs:domain tcg:Effect ;
   rdfs:range schema:DefinedTerm .
 
+########################################
+# General Rules                        #
+########################################
 
 tcg:defaultHandSize a rdf:Property ;
   rdfs:label "defaultHandSize"@en ;
