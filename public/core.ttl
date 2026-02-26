@@ -93,28 +93,69 @@ tcg:Role a rdfs:Class ;
   rdfs:comment "Functional role of a card in deckbuilding (removal, finisher, engine, etc.)."@en ;
   rdfs:subClassOf schema:DefinedTerm .
 
-#############################
-# METAGAME / COUNTERPLAY    #
-#############################
 
-tcg:Archetype a rdfs:Class ;
-  rdfs:label "Archetype"@en ;
-  rdfs:comment "Metagame archetype/strategy cluster (often format-dependent)."@en ;
+############################
+# PRE-GAME STRUCTURE (CORE)
+############################
+
+tcg:PreGameStructure a rdfs:Class ;
+  rdfs:label "PreGameStructure"@en ;
+  rdfs:comment "Defines the ordered procedure executed before the first turn begins (setup, shuffle, draw, mulligan, etc.)."@en ;
   rdfs:subClassOf schema:CreativeWork .
 
-tcg:Matchup a rdfs:Class ;
-  rdfs:label "Matchup"@en ;
-  rdfs:comment "A vs B relationship in a format with advantage and evidence."@en ;
+tcg:PreGameStep a rdfs:Class ;
+  rdfs:label "PreGameStep"@en ;
+  rdfs:comment "A single ordered step in the pre-game procedure."@en ;
   rdfs:subClassOf schema:Intangible .
 
-tcg:CounterClaim a rdfs:Class ;
-  rdfs:label "CounterClaim"@en ;
-  rdfs:comment "Evidence-bearing claim that something counters something (card/mechanic/archetype) in a format/time window."@en ;
-  rdfs:subClassOf schema:Intangible .
+tcg:hasPreGameStructure a rdf:Property ;
+  rdfs:label "hasPreGameStructure"@en ;
+  rdfs:comment "Associates a pre-game structure with a game or format."@en ;
+  rdfs:domain schema:Thing ;     # tcg:CardGame or tcg:Format
+  rdfs:range tcg:PreGameStructure .
 
-tcg:EvidenceBundle a rdfs:Class ;
-  rdfs:label "EvidenceBundle"@en ;
-  rdfs:subClassOf schema:Intangible .
+tcg:preGameStep a rdf:Property ;
+  rdfs:label "preGameStep"@en ;
+  rdfs:comment "Steps that compose a pre-game structure (use orderIndex for ordering)."@en ;
+  rdfs:domain tcg:PreGameStructure ;
+  rdfs:range tcg:PreGameStep .
+
+tcg:orderIndex a rdf:Property ;
+  rdfs:label "orderIndex"@en ;
+  rdfs:comment "Order within the procedure (0..n)."@en ;
+  rdfs:domain schema:Intangible ;
+  rdfs:range xsd:integer .
+
+tcg:stepSummary a rdf:Property ;
+  rdfs:label "stepSummary"@en ;
+  rdfs:comment "Short human/LLM-friendly summary of the step."@en ;
+  rdfs:domain tcg:PreGameStep ;
+  rdfs:range xsd:string .
+
+tcg:stepKind a rdf:Property ;
+  rdfs:label "stepKind"@en ;
+  rdfs:comment "A normalized category for the step (shuffle, presentDeck, drawOpeningHand, mulligan, chooseFirstPlayer, setupZone, revealInfo, etc.)."@en ;
+  rdfs:domain tcg:PreGameStep ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:involvesZone a rdf:Property ;
+  rdfs:label "involvesZone"@en ;
+  rdfs:comment "Zone involved in this step (deck, hand, battlefield, etc.), as a term."@en ;
+  rdfs:domain tcg:PreGameStep ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:performedByRole a rdf:Property ;
+  rdfs:label "performedByRole"@en ;
+  rdfs:comment "Who performs/initiates the step (eachPlayer, startingPlayer, nonStartingPlayer, activePlayer, judge, simultaneous, etc.)."@en ;
+  rdfs:domain tcg:PreGameStep ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:repeatable a rdf:Property ;
+  rdfs:label "repeatable"@en ;
+  rdfs:comment "Whether this step may repeat (e.g., mulligan loops)."@en ;
+  rdfs:domain schema:Intangible ;
+  rdfs:range xsd:boolean .
+
 
 #############################
 # RESOURCES / COSTS (ABSTRACT)
@@ -139,30 +180,6 @@ tcg:ResourceCostComponent a rdfs:Class ;
   rdfs:label "ResourceCostComponent"@en ;
   rdfs:comment "One component of a cost: amount + optional resource type."@en ;
   rdfs:subClassOf schema:Intangible .
-
-########################################
-# LLM-FRIENDLY DESCRIPTORS (OPTIONAL)  #
-########################################
-
-tcg:DescriptorType a rdfs:Class ;
-  rdfs:label "DescriptorType"@en ;
-  rdfs:comment "Descriptor category (role, interaction, playPattern, synergyTag, etc.)."@en ;
-  rdfs:subClassOf schema:DefinedTerm .
-
-tcg:CardDescriptor a rdfs:Class ;
-  rdfs:label "CardDescriptor"@en ;
-  rdfs:comment "Descriptor assignment for a card with provenance and confidence."@en ;
-  rdfs:subClassOf schema:Intangible .
-
-tcg:ExtractionMethod a rdfs:Class ;
-  rdfs:label "ExtractionMethod"@en ;
-  rdfs:comment "How a descriptor was produced (regex, LLM, human, consensus, model-vX...)."@en ;
-  rdfs:subClassOf schema:DefinedTerm .
-
-tcg:DescriptorEvidence a rdfs:Class ;
-  rdfs:label "DescriptorEvidence"@en ;
-  rdfs:comment "Evidence supporting a descriptor (snippets, URLs, dataset ids, etc.)."@en ;
-  rdfs:subClassOf schema:CreativeWork .
 
 ################
 # PROPERTIES   #
@@ -1132,3 +1149,107 @@ tcg:mulliganSummary a rdf:Property ;
   rdfs:comment "Human-readable description of the mulligan procedure."@en ;
   rdfs:domain tcg:MulliganRule ;
   rdfs:range xsd:string .
+
+############################
+# END CONDITIONS (CORE)
+############################
+
+tcg:EndCondition a rdfs:Class ;
+  rdfs:label "EndCondition"@en ;
+  rdfs:comment "A condition that can end the game (win or loss), usually checked continuously or at specific windows."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:WinCondition a rdfs:Class ;
+  rdfs:label "WinCondition"@en ;
+  rdfs:comment "A condition that causes a player to win the game."@en ;
+  rdfs:subClassOf tcg:EndCondition .
+
+tcg:LoseCondition a rdfs:Class ;
+  rdfs:label "LoseCondition"@en ;
+  rdfs:comment "A condition that causes a player to lose the game."@en ;
+  rdfs:subClassOf tcg:EndCondition .
+
+tcg:hasEndCondition a rdf:Property ;
+  rdfs:label "hasEndCondition"@en ;
+  rdfs:comment "Associates end conditions with a game or format."@en ;
+  rdfs:domain schema:Thing ;     # tcg:CardGame or tcg:Format
+  rdfs:range tcg:EndCondition .
+
+tcg:conditionKind a rdf:Property ;
+  rdfs:label "conditionKind"@en ;
+  rdfs:comment "Normalized kind (lifeZero, deckEmpty, poisonThreshold, loreThreshold, objectivePoints, concession, timeout, etc.)."@en ;
+  rdfs:domain tcg:EndCondition ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:thresholdValue a rdf:Property ;
+  rdfs:label "thresholdValue"@en ;
+  rdfs:comment "Numeric threshold used by the condition (e.g., 0 life, 10 poison, 20 lore)."@en ;
+  rdfs:domain tcg:EndCondition ;
+  rdfs:range xsd:decimal .
+
+tcg:appliesToRole a rdf:Property ;
+  rdfs:label "appliesToRole"@en ;
+  rdfs:comment "Who is evaluated (currentPlayer, anyPlayer, opponent, team, etc.)."@en ;
+  rdfs:domain tcg:EndCondition ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:checkTiming a rdf:Property ;
+  rdfs:label "checkTiming"@en ;
+  rdfs:comment "When the condition is checked (continuous, stateBased, endOfTurn, endOfRound, specialWindow, etc.)."@en ;
+  rdfs:domain tcg:EndCondition ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:conditionSummary a rdf:Property ;
+  rdfs:label "conditionSummary"@en ;
+  rdfs:comment "Human/LLM-friendly description of the end condition."@en ;
+  rdfs:domain tcg:EndCondition ;
+  rdfs:range xsd:string .
+
+
+########################################
+# LLM-FRIENDLY DESCRIPTORS (OPTIONAL)  #
+########################################
+
+tcg:DescriptorType a rdfs:Class ;
+  rdfs:label "DescriptorType"@en ;
+  rdfs:comment "Descriptor category (role, interaction, playPattern, synergyTag, etc.)."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:CardDescriptor a rdfs:Class ;
+  rdfs:label "CardDescriptor"@en ;
+  rdfs:comment "Descriptor assignment for a card with provenance and confidence."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:ExtractionMethod a rdfs:Class ;
+  rdfs:label "ExtractionMethod"@en ;
+  rdfs:comment "How a descriptor was produced (regex, LLM, human, consensus, model-vX...)."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:DescriptorEvidence a rdfs:Class ;
+  rdfs:label "DescriptorEvidence"@en ;
+  rdfs:comment "Evidence supporting a descriptor (snippets, URLs, dataset ids, etc.)."@en ;
+  rdfs:subClassOf schema:CreativeWork .
+
+#############################
+# METAGAME / COUNTERPLAY    #
+#############################
+
+tcg:Archetype a rdfs:Class ;
+  rdfs:label "Archetype"@en ;
+  rdfs:comment "Metagame archetype/strategy cluster (often format-dependent)."@en ;
+  rdfs:subClassOf schema:CreativeWork .
+
+tcg:Matchup a rdfs:Class ;
+  rdfs:label "Matchup"@en ;
+  rdfs:comment "A vs B relationship in a format with advantage and evidence."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:CounterClaim a rdfs:Class ;
+  rdfs:label "CounterClaim"@en ;
+  rdfs:comment "Evidence-bearing claim that something counters something (card/mechanic/archetype) in a format/time window."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:EvidenceBundle a rdfs:Class ;
+  rdfs:label "EvidenceBundle"@en ;
+  rdfs:subClassOf schema:Intangible .
+
