@@ -940,3 +940,61 @@ tcg:handSizeEnforcement a rdf:Property ;
   rdfs:comment "How hand size limit is enforced (discardDownToLimit, noLimit, endOfTurnCheck, continuousCheck, etc.)."@en ;
   rdfs:domain schema:Thing ;   # CardGame or Format
   rdfs:range schema:DefinedTerm .
+
+########################################
+# CARD FACE ARTWORK (CORE)
+########################################
+
+tcg:faceArtwork a rdf:Property ;
+  rdfs:label "faceArtwork"@en ;
+  rdfs:comment "Artwork image for a specific card face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range schema:ImageObject .
+
+tcg:faceArtist a rdf:Property ;
+  rdfs:label "faceArtist"@en ;
+  rdfs:comment "Primary artist credited for the artwork on this card face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range schema:Person .
+
+tcg:faceArtCreditText a rdf:Property ;
+  rdfs:label "faceArtCreditText"@en ;
+  rdfs:comment "Artist/credit line exactly as printed (useful for localization or multiple credits)."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+tcg:faceIllustrationId a rdf:Property ;
+  rdfs:label "faceIllustrationId"@en ;
+  rdfs:comment "Identifier for the illustration on this face, if provided by the data source (e.g., an 'illustration_id')."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+tcg:faceArtVariant a rdf:Property ;
+  rdfs:label "faceArtVariant"@en ;
+  rdfs:comment "Art variant label (alt art, borderless, showcase, promo art, etc.) when scoped to a face."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:faceCopyrightText a rdf:Property ;
+  rdfs:label "faceCopyrightText"@en ;
+  rdfs:comment "Copyright/legal line associated with the face artwork, if present."@en ;
+  rdfs:domain tcg:CardFace ;
+  rdfs:range xsd:string .
+
+tcg:printingArtwork a rdf:Property ;
+  rdfs:label "printingArtwork"@en ;
+  rdfs:comment "Primary artwork image for this specific printing (when not modeled per-face)."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range schema:ImageObject .
+
+tcg:printingArtist a rdf:Property ;
+  rdfs:label "printingArtist"@en ;
+  rdfs:comment "Artist credited on this specific printing."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range schema:Person .
+
+tcg:artVariant a rdf:Property ;
+  rdfs:label "artVariant"@en ;
+  rdfs:comment "Art variant label for this printing (alt art, borderless, etc.)."@en ;
+  rdfs:domain tcg:CardPrinting ;
+  rdfs:range schema:DefinedTerm .
