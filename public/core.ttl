@@ -1253,3 +1253,188 @@ tcg:EvidenceBundle a rdfs:Class ;
   rdfs:label "EvidenceBundle"@en ;
   rdfs:subClassOf schema:Intangible .
 
+
+
+@prefix tcg:    <https://tcg-schema.org/core#> .
+@prefix schema: <https://schema.org/> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+############################################################
+# GAME STATE MODEL (DYNAMIC LAYER)
+############################################################
+
+tcg:GameState a rdfs:Class ;
+  rdfs:label "GameState"@en ;
+  rdfs:comment "A snapshot of the current game situation, including zones, active player, and phase."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:hasZone a rdf:Property ;
+  rdfs:label "hasZone"@en ;
+  rdfs:domain tcg:GameState ;
+  rdfs:range tcg:Zone .
+
+tcg:activePlayer a rdf:Property ;
+  rdfs:label "activePlayer"@en ;
+  rdfs:domain tcg:GameState ;
+  rdfs:range tcg:Player .
+
+tcg:currentPhase a rdf:Property ;
+  rdfs:label "currentPhase"@en ;
+  rdfs:domain tcg:GameState ;
+  rdfs:range tcg:TurnPhase .
+
+############################################################
+# PLAYER
+############################################################
+
+tcg:Player a rdfs:Class ;
+  rdfs:label "Player"@en ;
+  rdfs:comment "An agent participating in the game."@en ;
+  rdfs:subClassOf schema:Person .
+
+tcg:controls a rdf:Property ;
+  rdfs:label "controls"@en ;
+  rdfs:domain tcg:Player ;
+  rdfs:range schema:Thing .
+
+############################################################
+# ZONES
+############################################################
+
+tcg:Zone a rdfs:Class ;
+  rdfs:label "Zone"@en ;
+  rdfs:comment "A conceptual area of the game where objects can reside (hand, deck, discard, play area, etc.)."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:zoneRole a rdf:Property ;
+  rdfs:label "zoneRole"@en ;
+  rdfs:comment "Defines the functional role of a zone."@en ;
+  rdfs:domain tcg:Zone ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:contains a rdf:Property ;
+  rdfs:label "contains"@en ;
+  rdfs:domain tcg:Zone ;
+  rdfs:range schema:Thing .
+
+############################################################
+# ACTIONS
+############################################################
+
+tcg:GameAction a rdfs:Class ;
+  rdfs:label "GameAction"@en ;
+  rdfs:comment "An action performed by a player within the rules of the game."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:actionType a rdf:Property ;
+  rdfs:label "actionType"@en ;
+  rdfs:comment "The type/category of the action (playCard, activateAbility, attack, etc.)."@en ;
+  rdfs:domain tcg:GameAction ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:performedBy a rdf:Property ;
+  rdfs:label "performedBy"@en ;
+  rdfs:domain tcg:GameAction ;
+  rdfs:range tcg:Player .
+
+tcg:targets a rdf:Property ;
+  rdfs:label "targets"@en ;
+  rdfs:domain tcg:GameAction ;
+  rdfs:range schema:Thing .
+
+tcg:producesEffect a rdf:Property ;
+  rdfs:label "producesEffect"@en ;
+  rdfs:domain tcg:GameAction ;
+  rdfs:range tcg:Effect .
+
+############################################################
+# EFFECTS
+############################################################
+
+tcg:Effect a rdfs:Class ;
+  rdfs:label "Effect"@en ;
+  rdfs:comment "A change applied to the game state as the result of an action or ability."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:effectType a rdf:Property ;
+  rdfs:label "effectType"@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:modifies a rdf:Property ;
+  rdfs:label "modifies"@en ;
+  rdfs:domain tcg:Effect ;
+  rdfs:range schema:Thing .
+
+############################################################
+# TRIGGERS & PRIORITY WINDOWS
+############################################################
+
+tcg:TriggerCondition a rdfs:Class ;
+  rdfs:label "TriggerCondition"@en ;
+  rdfs:comment "A condition under which an ability or effect may trigger."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:triggersAbility a rdf:Property ;
+  rdfs:label "triggersAbility"@en ;
+  rdfs:domain tcg:TriggerCondition ;
+  rdfs:range tcg:Ability .
+
+tcg:PriorityWindow a rdfs:Class ;
+  rdfs:label "PriorityWindow"@en ;
+  rdfs:comment "A timing window during which players may perform actions or trigger abilities."@en ;
+  rdfs:subClassOf schema:DefinedTerm .
+
+tcg:opensWindow a rdf:Property ;
+  rdfs:label "opensWindow"@en ;
+  rdfs:domain tcg:GameAction ;
+  rdfs:range tcg:PriorityWindow .
+
+############################################################
+# RESOLUTION MODEL
+############################################################
+
+tcg:ResolutionModel a rdfs:Class ;
+  rdfs:label "ResolutionModel"@en ;
+  rdfs:comment "Defines the ordered structure by which a complex action or interaction is resolved."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:resolutionStep a rdf:Property ;
+  rdfs:label "resolutionStep"@en ;
+  rdfs:domain tcg:ResolutionModel ;
+  rdfs:range tcg:ResolutionStep .
+
+tcg:ResolutionStep a rdfs:Class ;
+  rdfs:label "ResolutionStep"@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:stepOrder a rdf:Property ;
+  rdfs:label "stepOrder"@en ;
+  rdfs:domain tcg:ResolutionStep ;
+  rdfs:range xsd:integer .
+
+tcg:stepSummary a rdf:Property ;
+  rdfs:label "stepSummary"@en ;
+  rdfs:domain tcg:ResolutionStep ;
+  rdfs:range xsd:string .
+
+############################################################
+# ACTION CONSTRAINTS (LEGALITY LAYER)
+############################################################
+
+tcg:ActionConstraint a rdfs:Class ;
+  rdfs:label "ActionConstraint"@en ;
+  rdfs:comment "A rule that defines when a specific action type is allowed."@en ;
+  rdfs:subClassOf schema:Intangible .
+
+tcg:appliesToActionType a rdf:Property ;
+  rdfs:label "appliesToActionType"@en ;
+  rdfs:domain tcg:ActionConstraint ;
+  rdfs:range schema:DefinedTerm .
+
+tcg:requiresGameState a rdf:Property ;
+  rdfs:label "requiresGameState"@en ;
+  rdfs:domain tcg:ActionConstraint ;
+  rdfs:range tcg:GameState .
